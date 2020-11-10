@@ -124,7 +124,7 @@ def taxid(inputstr,flag):
 
    
 
-    flag = 0
+    
     for div in divlist:   
         companylink = 'https://eintaxid.com' + soup.find('a')['href']
         content = div.text.lstrip()
