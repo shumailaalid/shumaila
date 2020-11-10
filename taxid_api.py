@@ -26,7 +26,7 @@ def index():
 def search():
     flag = 0
     
-    return(taxid(str(request.args.get('input')),str(request.args.get('flag'))))
+    return(taxid(str(request.args.get('search')),str(request.args.get('type'))))
     #print(request.args.get('barcode'))
    
     #print(request.args.get('name'))
