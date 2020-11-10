@@ -2,7 +2,8 @@ from flask import Flask
 from flask import request
 from waitress import serve
 import json, datetime
-from taxid import taxid
+from taxid import checktaxid
+from taxid import checkbarcodeid
 app = Flask(__name__)
 
 
@@ -13,7 +14,7 @@ def errstr(flag):
     
     e = 'Something went really wrong. Sorry for Inconvenience !!!'
         
-    return json.dumps({'status':'Error'})
+    return json.dumps({'status':'Error',"Message":e})
 
 ########################################## Routing Functions #############################################################
 ''' This function do the calculations '''
@@ -24,19 +25,20 @@ def index():
 
 @app.route("/search")
 def search():
-    flag = 0
     
-    return(taxid(str(request.args.get('inputstr')),str(request.args.get('type'))))
-    #print(request.args.get('barcode'))
-   
-    #print(request.args.get('name'))
+    if str(request.args.get('flag')) == '1':
+        return(checktaxid(str(request.args.get('taxid'))))
+                    
+    elif str(request.args.get('flag')) == '2':
+        return(checkbarcodeid(str(request.args.get('barcode')),str(request.args.get('name'))))    
+    
     
         
 
     
    
     
-    return errstr(flag)
+    return json.dumps({'status':'Error'})
         
   
  
