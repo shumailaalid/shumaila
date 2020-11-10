@@ -102,7 +102,7 @@ def smarty_streets_validation(input_data):
     return bar
 
 
-def taxid(inbar,name):
+def taxid(inputstr,flag):
     
     headers = {'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.142 Safari/537.36',
            'x-requested-with': 'XMLHttpRequest'
@@ -111,31 +111,18 @@ def taxid(inbar,name):
     myquery = ''
     url = 'https://eintaxid.com/search-ajax.php'
     
-    if len(inbar) < 2 and len(name) < 2:
+    if len(inputstr) < 2 :
         return json.dumps({'status':'Invalid Input'})
-    if len(inbar) > 2:
-        myquery = str(inbar)
-        myobj = {'query': str(inbar)}
-        page = requests.post(url, data = myobj,headers=headers)
-        soup = BeautifulSoup(page.text,'html.parser')
-        divlist = soup.findAll('div',{'class':'fixed-panel'})
-        if len(divlist) == 0 and len(name) > 2:
-            myquery = str(name)
-            myobj = {'query': myquery}
-            page = requests.post(url, data = myobj,headers=headers)
-            soup = BeautifulSoup(page.text,'html.parser')
-            divlist = soup.findAll('div',{'class':'fixed-panel'})
-            if len(divlist) == 0:
-                return json.dumps({'status':'Not Found'})
-
-    elif len(name) > 2:
-        myquery = str(name)
-        myobj = {'query': myquery}
+    if len(inputstr) > 2:
+        myquery = str(inputstr)
+        myobj = {'query': str(inputstr)}
         page = requests.post(url, data = myobj,headers=headers)
         soup = BeautifulSoup(page.text,'html.parser')
         divlist = soup.findAll('div',{'class':'fixed-panel'})
         if len(divlist) == 0:
             return json.dumps({'status':'Not Found'})
+
+   
 
     flag = 0
     for div in divlist:   
@@ -184,6 +171,10 @@ def taxid(inbar,name):
             inbar = inbar.split('.',1)[0]
         except:
             pass
+
+        if flag == 1:
+            return json.dumps({'status':'Found','name':title,'barcode':inbar,'ein_number':str(einnumber),'street':street,'city':city,'state':state,'zip':pcode,'phone':phone.strip()})
+        
        
         if (str(inbar) in str(barcode)) or (str(barcode) in str(inbar)):        
             return json.dumps({'status':'Found','name':title,'barcode':inbar,'ein_number':str(einnumber),'street':street,'city':city,'state':state,'zip':pcode,'phone':phone.strip()})
