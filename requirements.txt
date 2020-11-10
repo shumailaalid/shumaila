@@ -1,9 +1,9 @@
+requests
 bs4
-pandas
+pandas==1.0.5
 csv
 usaddress
 os
 csv
 urllib
 flask
-requests
