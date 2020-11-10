@@ -13,7 +13,7 @@ def errstr(flag):
     
     e = 'Something went really wrong. Sorry for Inconvenience !!!'
         
-    return json.dumps({'status':'Error',"Message":e})
+    return json.dumps({'status':'Error'})
 
 ########################################## Routing Functions #############################################################
 ''' This function do the calculations '''
@@ -26,7 +26,7 @@ def index():
 def search():
     flag = 0
     
-    return(taxid(str(request.args.get('search')),str(request.args.get('type'))))
+    return(taxid(str(request.args.get('inputstr')),str(request.args.get('type'))))
     #print(request.args.get('barcode'))
    
     #print(request.args.get('name'))
