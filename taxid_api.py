@@ -14,7 +14,7 @@ def errstr(flag):
     
     e = 'Something went really wrong. Sorry for Inconvenience !!!'
         
-    return json.dumps({'status':'Error')
+    return json.dumps({'status':'Error'})
 
 ########################################## Routing Functions #############################################################
 ''' This function do the calculations '''
@@ -23,14 +23,13 @@ def index():
     return errstr(0)    
      
 
-@app.route("/search")
-def search():
+@app.route("/searchbyname")
+def searchbyname():
     
-    if str(request.args.get('flag')) == '1':
-        return(checktaxid(str(request.args.get('taxid'))))
+    
                     
-    elif str(request.args.get('flag')) == '2':
-        return(checkbarcodeid(str(request.args.get('barcode')),str(request.args.get('name'))))    
+    
+    return(checkbarcodeid(str(request.args.get('barcode')),str(request.args.get('name'))))    
     
     
         
@@ -39,7 +38,17 @@ def search():
    
     
     return json.dumps({'status':'Error'})
-        
+
+@app.route("/searchbytaxid")
+def searchbytaxid():
+    
+    return(checktaxid(str(request.args.get('taxid'))))
+    
+
+    
+   
+    
+    return json.dumps({'status':'Error'})
   
  
 ###################################################### Main #############################################################
