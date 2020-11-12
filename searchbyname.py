@@ -105,7 +105,7 @@ def smarty_streets_validation(input_data):
 
 
 def checkbarcodeid(inbar,name):
-    
+    myresult = []
     headers = {'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.142 Safari/537.36',
            'x-requested-with': 'XMLHttpRequest'
 
@@ -179,11 +179,17 @@ def checkbarcodeid(inbar,name):
 
         
         #print(barcode)
-        if (str(inbar.strip()) in str(barcode).strip()) or (str(barcode.strip()) in str(inbar.strip())):        
-            #return json.dumps({'status':'Found','name':title,'barcode':barcode,'ein_number':str(einnumber),'street':street,'city':city,'state':state,'zip':pcode,'phone':phone.strip()})
-            return json.dumps({'status':'Found','Result':{'name':title,'barcode':barcode,'ein_number':str(einnumber),'street':street,'city':city,'state':state,'zip':pcode,'phone':phone.strip()}})
+        if (str(inbar.strip()) in str(barcode).strip()) or (str(barcode.strip()) in str(inbar.strip())):
+            myresult.append({'name':title,'barcode':barcode,'ein_number':str(einnumber),'street':street,'city':city,'state':state,'zip':pcode,'phone':phone.strip()})
+                            #return json.dumps({'status':'Found','name':title,'barcode':barcode,'ein_number':str(einnumber),'street':street,'city':city,'state':state,'zip':pcode,'phone':phone.strip()})
+            #return json.dumps({'status':'Found','Result':{'name':title,
+            #'barcode':barcode,'ein_number':str(einnumber),'street':street,'city':city,'state':state,'zip':pcode,'phone':phone.strip()}})
             
-    return json.dumps({'status':'Not Matched'})
+    if len(myresult) > 0:
+        return json.dumps({'status':'Found','Result':myresult})
+    else:
+        
+        return json.dumps({'status':'Not Matched'})
 
 
  
