@@ -28,8 +28,8 @@ def searchbyname():
     
     
                     
-    
-    return(checkbarcodeid(str(request.args.get('barcode')),str(request.args.get('name'))))    
+    if len(str(request.args.get('name')) > 0:
+        return(checkbarcodeid(str(request.args.get('barcode')),str(request.args.get('name'))))    
     
     
         
@@ -41,8 +41,9 @@ def searchbyname():
 
 @app.route("/searchbytaxid")
 def searchbytaxid():
-    
-    return(checktaxid(str(request.args.get('taxid'))))
+
+    if len(str(request.args.get('taxid'))) > 0:
+        return(checktaxid(str(request.args.get('taxid'))))
     
 
     
