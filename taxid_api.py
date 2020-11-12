@@ -2,8 +2,8 @@ from flask import Flask
 from flask import request
 from waitress import serve
 import json, datetime
-from taxid import checktaxid
-from taxid import checkbarcodeid
+from searchbytaxid import checktaxid
+from searchbyname import checkbarcodeid
 app = Flask(__name__)
 
 
@@ -37,7 +37,7 @@ def searchbyname():
     
    
     
-    return json.dumps({'status':'Error'})
+    return json.dumps({'status':'Error','Result':{}})
 
 @app.route("/searchbytaxid")
 def searchbytaxid():
@@ -48,7 +48,7 @@ def searchbytaxid():
     
    
     
-    return json.dumps({'status':'Error'})
+    return json.dumps({'status':'Error','Result':{}})
   
  
 ###################################################### Main #############################################################
