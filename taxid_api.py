@@ -25,11 +25,13 @@ def index():
 
 @app.route("/searchbyname")
 def searchbyname():
-    
-    
-                    
-    if len(str(request.args.get('name'))) > 0:
-        return(checkbarcodeid(str(request.args.get('barcode')),str(request.args.get('name'))))    
+    try:
+        return(checkbarcodeid(str(request.args.get('barcode')),str(request.args.get('name'))))
+    except:
+        pass
+
+    return json.dumps({'status':'Error'})
+        
     
     
         
@@ -42,8 +44,10 @@ def searchbyname():
 @app.route("/searchbytaxid")
 def searchbytaxid():
 
-    if len(str(request.args.get('taxid'))) > 0:
+    try:   
         return(checktaxid(str(request.args.get('taxid'))))
+    except:
+        pass
     
 
     
