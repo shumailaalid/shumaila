@@ -28,7 +28,7 @@ def searchbyname():
     
     
                     
-    if len(str(request.args.get('name')) > 0:
+    if len(str(request.args.get('name'))) > 0:
         return(checkbarcodeid(str(request.args.get('barcode')),str(request.args.get('name'))))    
     
     
