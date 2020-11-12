@@ -37,7 +37,7 @@ def searchbyname():
     
    
     
-    return json.dumps({'status':'Error','Result':{}})
+    return json.dumps({'status':'Error'})
 
 @app.route("/searchbytaxid")
 def searchbytaxid():
@@ -48,7 +48,7 @@ def searchbytaxid():
     
    
     
-    return json.dumps({'status':'Error','Result':{}})
+    return json.dumps({'status':'Error'})
   
  
 ###################################################### Main #############################################################

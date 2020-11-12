@@ -110,13 +110,13 @@ def checktaxid(taxid):
     myquery = ''
     url = 'https://eintaxid.com/search-ajax.php'
     if len(taxid) < 2:
-        return json.dumps({'status':'Error','Result':{}})
+        return json.dumps({'status':'Error'})
     myobj = {'query': str(taxid)}
     page = requests.post(url, data = myobj,headers=headers)
     soup = BeautifulSoup(page.text,'html.parser')
     divlist = soup.findAll('div',{'class':'fixed-panel'})
     if len(divlist) == 0:
-        return json.dumps({'status':'Not Found','Result':{}})
+        return json.dumps({'status':'Not Found'})
     
     for div in divlist:   
         companylink = 'https://eintaxid.com' + soup.find('a')['href']
@@ -157,7 +157,7 @@ def checktaxid(taxid):
                 pass
         except Exception as e:
             print(e)
-            return json.dumps({'status':'Error','Result':{}})
+            return json.dumps({'status':'Error'})
             
            
        

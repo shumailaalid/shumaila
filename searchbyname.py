@@ -114,7 +114,7 @@ def checkbarcodeid(inbar,name):
     url = 'https://eintaxid.com/search-ajax.php'
     
     if len(inbar) < 2 and len(name) < 2:
-        return json.dumps({'status':'Invalid Input'})
+        return json.dumps({'status':'Error'})
     
     
     inputstr = name
@@ -125,7 +125,7 @@ def checkbarcodeid(inbar,name):
         soup = BeautifulSoup(page.text,'html.parser')
         divlist = soup.findAll('div',{'class':'fixed-panel'})
         if len(divlist) == 0:
-            return json.dumps({'status':'Not Found','Result':{}})
+            return json.dumps({'status':'Not Found'})
     
    
 
@@ -169,7 +169,7 @@ def checkbarcodeid(inbar,name):
                 pass
         except Exception as e:
             #print(e)
-            return json.dumps({'status':'Error','Result':{}})
+            return json.dumps({'status':'Error'})
             
            
         try:
@@ -183,7 +183,7 @@ def checkbarcodeid(inbar,name):
             #return json.dumps({'status':'Found','name':title,'barcode':barcode,'ein_number':str(einnumber),'street':street,'city':city,'state':state,'zip':pcode,'phone':phone.strip()})
             return json.dumps({'status':'Found','Result':{'name':title,'barcode':barcode,'ein_number':str(einnumber),'street':street,'city':city,'state':state,'zip':pcode,'phone':phone.strip()}})
             
-    return json.dumps({'status':'Not Matched','Result':{}})
+    return json.dumps({'status':'Not Matched'})
 
 
  
