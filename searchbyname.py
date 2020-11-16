@@ -138,6 +138,11 @@ def checkbarcodeid(inbar,name):
         address = content.split('Address: ',1)[1].split('Phone',1)[0]
         phone = content.split('Phone: ',1)[1]
         fulladdress = address
+        try:
+            zipcode= fulladdress.split(' ')[-1].split('-')[0]
+            fulladdress = fulladdress.replace(fulladdress.split(' ')[-1],zipcode)
+        except:
+            pass
         address = usaddress.parse(address)
         m = 0
         street = ""
