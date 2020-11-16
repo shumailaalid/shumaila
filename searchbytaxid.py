@@ -125,6 +125,7 @@ def checktaxid(taxid):
         einnumber = content.split('EIN Number: ',1)[1].split('Address',1)[0]
         address = content.split('Address: ',1)[1].split('Phone',1)[0]
         phone = content.split('Phone: ',1)[1]
+        fulladdress = address
         address = usaddress.parse(address)
         m = 0
         street = ""
@@ -162,8 +163,9 @@ def checktaxid(taxid):
            
        
 
-        
-        return json.dumps({'status':'Found','Result':{'name':title,'barcode':barcode,'ein_number':str(einnumber),'street':street,'city':city,'state':state,'zip':pcode,'phone':phone.strip()}
+        return json.dumps({'status':'Found','Result':{'name':title,'barcode':barcode,'ein_number':str(einnumber),'Address':fulladdress,'phone':phone.strip()}
+            })
+        #return json.dumps({'status':'Found','Result':{'name':title,'barcode':barcode,'ein_number':str(einnumber),'street':street,'city':city,'state':state,'zip':pcode,'phone':phone.strip()}
             })
         
     
