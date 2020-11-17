@@ -61,18 +61,18 @@ def smarty_streets_validation(input_data):
     for provider_id,provider_data in input_data.items():
         try:
             validation_data = make_address_validation_request(provider_data)
+            barcode =validation_data.get("delivery_point_barcode","")
             address_metadata = validation_data.get("metadata",{})
             address_analysis = validation_data.get("analysis",{})
             co = validation_data.get("components",{})
-            barcode =validation_data.get("delivery_point_barcode","")
             lat = address_metadata.get("latitude","")
             _long = address_metadata.get("longitude","")
             county = address_metadata.get("county_fips","")
             code = address_analysis.get("dpv_match_code","")
             if not barcode:
                 barcode = "N/A"
-            metadata = f"barcode:{barcode}|lat:{lat}|long:{_long}|county:{county}|matchcode:{code}"
                 
+            metadata = f"barcode:{barcode}|lat:{lat}|long:{_long}|county:{county}|matchcode:{code}"
         except Exception as e:
                         #print(e)
             error = 'yes'
@@ -101,6 +101,12 @@ def smarty_streets_validation(input_data):
         
     return bar
 
+def Remove(duplicate):
+    final_list = []
+    for num in duplicate:
+        if num.strip() not in final_list:
+            final_list.append(num.strip())
+    return ', '.join(final_list)
 
 def checktaxid(taxid):
     headers = {'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.142 Safari/537.36',
@@ -124,8 +130,9 @@ def checktaxid(taxid):
         title = content.split('EIN Number',1)[0]
         einnumber = content.split('EIN Number: ',1)[1].split('Address',1)[0]
         address = content.split('Address: ',1)[1].split('Phone',1)[0]
+        print(address)
         phone = content.split('Phone: ',1)[1]
-        fulladdress = address
+        fulladdress = Remove(address.split(","))
         try:
             zipcode= fulladdress.split(' ')[-1].split('-')[0]
             fulladdress = fulladdress.replace(fulladdress.split(' ')[-1],zipcode)
