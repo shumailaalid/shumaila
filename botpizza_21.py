@@ -699,13 +699,13 @@ def handle_query(call):
 def botpizza_21():
     
     
-    while True:
+    if True:
         try:            
             bot.polling(none_stop=True, interval=0)
             #executor.start_polling(dp, skip_updates=True)
         except Exception as e:
-            print('main',e)
-            time.sleep(2)
+            retrun e
+            
         
 #botpizza_21()
 
