@@ -1,1 +1,1 @@
-web: gunicorn botpizza_api:app
+web: python Bot.py
