@@ -701,7 +701,7 @@ def botpizza_21():
     
     while True:
         try:            
-            bot.polling(none_stop=True, interval=0, timeout=10)
+            bot.polling(none_stop=True, interval=0)
             #executor.start_polling(dp, skip_updates=True)
         except Exception as e:
             print('main',e)
