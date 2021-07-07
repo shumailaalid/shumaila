@@ -1,1 +1,1 @@
-web: gunicorn taxid_api:app
+web: gunicorn botpizza_21:app
