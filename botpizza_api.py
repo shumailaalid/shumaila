@@ -20,8 +20,11 @@ def errstr(flag):
 ''' This function do the calculations '''
 @app.route("/")
 def index():
-    return(botpizza_21())
-    return 'hi'
+    try:
+        return(botpizza_21())
+    except Exception as e:
+        
+        return str(e)
      
 
 
