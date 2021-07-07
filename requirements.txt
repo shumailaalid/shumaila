@@ -1,5 +1,5 @@
 pyTelegramBotAPI==3.7.9
-pandas==1.2.1
+pandas
 Flask==2.0.1
 waitress==2.0.0
 jsonify==0.5
