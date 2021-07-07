@@ -1,1 +1,1 @@
-web: gunicorn botpizza_21:app
+web: gunicorn botpizza_api:app
