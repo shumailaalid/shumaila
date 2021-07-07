@@ -20,10 +20,10 @@ global stringList1
 stringList1={}
 selected ={}
 selected[1] = {'check':0,'name':'mm','phone':'11111111','final':'fffffffff','price':0,'egg':0,'fish':0,'meat':0,'veg':0,'oderid':0,'stringList1':{},'cardno':'','email':'','Month':'','Year':'','cvv':''}
-crossIcon = u"\u274C"
-tickicon=u"\u2713"
+crossIcon = '^^'#u"\u274C"
+tickicon='**'#u"\u2713"
 
-cart = u"\U0001F6D2"
+cart = '!!' #u"\U0001F6D2"
 
 def makeKeyboard(stringList,flag):
 
