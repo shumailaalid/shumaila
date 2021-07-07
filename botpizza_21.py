@@ -701,7 +701,7 @@ def botpizza_21():
     
     if True:
         try:            
-            bot.polling(none_stop=True, interval=0)
+            retrun bot.polling(none_stop=True, interval=0)
             #executor.start_polling(dp, skip_updates=True)
         except Exception as e:
             retrun e
