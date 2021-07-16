@@ -3,12 +3,13 @@ import ast
 import time
 import pandas as pd
 from telebot import types
+from flask import Flask, request
 
 SECRET_KEY = "sk_test_4eC39HqLyjWDarjtT1zdp7dc"
 PAYMENTS_PROVIDER_TOKEN = '284685063:TEST:Y2RmY2JjZmM5MDZl'
 
 
-
+server = Flask(__name__)
 
 
 bot = telebot.TeleBot('1858996616:AAH_YJcU9EiimHjJ5sBxjrX0fxG4CEIWLRo')
@@ -20,10 +21,10 @@ global stringList1
 stringList1={}
 selected ={}
 selected[1] = {'check':0,'name':'mm','phone':'11111111','final':'fffffffff','price':0,'egg':0,'fish':0,'meat':0,'veg':0,'oderid':0,'stringList1':{},'cardno':'','email':'','Month':'','Year':'','cvv':''}
-crossIcon = '^^'#u"\u274C"
-tickicon='**'#u"\u2713"
+crossIcon = u"\u274C"
+tickicon=u"\u2713"
 
-cart = '!!' #u"\U0001F6D2"
+cart = u"\U0001F6D2"
 
 def makeKeyboard(stringList,flag):
 
@@ -130,7 +131,7 @@ def handle_command_adminwindow(message):
                        types.InlineKeyboardButton(text="Opening hours",callback_data="['value', '" + "Opening hours" + "', '" + "Hours" + "']"),
                      types.InlineKeyboardButton(text="Menu",callback_data="['value', '" + "Menu" + "', '" + "Menu" + "']"))
 
-        temp = {chatid:{'check':0,'name':'','phone':'','final':'','price':0,'oderid':0,'stringList1':{},'cardno':'','email':'','Month':'','Year':'','cvv':''}}
+        temp = {chatid:{'check':0,'name':'','phone':'','final':'','delivery':0,'deliverytime':0,'price':0,'oderid':0,'stringList1':{},'cardno':'','email':'','Month':'','Year':'','cvv':''}}
         bot.send_message(chat_id=message.chat.id,text="Hello ! Welcome ! I am your personal virtual assistance",reply_markup=markup,parse_mode='HTML')
         selected.update(temp)
     else:
@@ -146,29 +147,15 @@ def handle_command_adminwindow(message):
                 selected[message.chat.id]['check'] = 3
             elif selected[message.chat.id]['check'] == 3:
                 selected[message.chat.id]['email'] = str(message.json["text"])
-                prices = [
-        types.LabeledPrice(label='Pizza Bot', amount=(int)(selected[message.chat.id]['price'])*100),
-       
-    ]
-                m= bot.send_invoice(chat_id=message.chat.id, title='Pizza',
-                               description=selected[message.chat.id]['final'],
-                               provider_token=PAYMENTS_PROVIDER_TOKEN,
-                               currency='usd',
-                               photo_url='https://media-cdn.tripadvisor.com/media/photo-s/0a/c0/7c/98/best-pizza-in-lahore.jpg',
-                               photo_height=None,  # !=0/None or picture won't be shown
-                               photo_width=512,
-                               photo_size=512,
-                               is_flexible=False,  # True If you need to set up Shipping Fee
-                               prices=prices,
-                                 start_parameter='pizza',
-                               invoice_payload='HAPPY'
-                               )
-                print(m)
-                m = str(m).split("'pay': ",1)[1].split('}',1)[0]
-                if m == 'True':
-                    print("Payment Successfull")
-                else:
-                    print('ERror in payment')
+
+                markup = types.InlineKeyboardMarkup(row_width=3)     
+            
+                markup.add(types.InlineKeyboardButton(text="Yes, Sure!!!",callback_data="['value', '" + "YesOrder" + "', '" + "YesOrder" + "']"),
+                           types.InlineKeyboardButton(text="No, Thanks",callback_data="['value', '" + "NoOrder" + "', '" + "NoOrder" + "']"))
+                        
+
+                bot.send_message(chat_id=message.chat.id,text="Would you like to order your pizza delivery",reply_markup=markup,parse_mode='HTML')
+                
                 
           
                 ######## Absar add here ###########
@@ -182,7 +169,7 @@ def handle_command_adminwindow(message):
                            types.InlineKeyboardButton(text="Opening hours",callback_data="['value', '" + "Opening hours" + "', '" + "Hours" + "']"),
                          types.InlineKeyboardButton(text="Menu",callback_data="['value', '" + "Menu" + "', '" + "Menu" + "']"))
 
-            temp = {chatid:{'check':0,'name':'','phone':'','final':'','price':0,'oderid':0,'stringList1':{},'cardno':'','email':'','Month':'','Year':'','cvv':''}}
+            temp = {chatid:{'check':0,'name':'','phone':'','final':'','delivery':0,'deliverytime':0,'price':0,'oderid':0,'stringList1':{},'cardno':'','email':'','Month':'','Year':'','cvv':''}}
             bot.send_message(chat_id=message.chat.id,text="Hello ! Welcome ! I am your personal virtual assistance",reply_markup=markup,parse_mode='HTML')
             selected.update(temp)
 
@@ -229,6 +216,173 @@ def handle_query(call):
                      types.InlineKeyboardButton(text="More",callback_data="['value', '" + "More" + "', '" + "mer" + "']"))
             bot.send_message(chat_id=call.message.chat.id,text="What kind of Pizza do you want",reply_markup=markup,parse_mode='HTML')
 
+        elif 'OrderYes' in keyFromCallBack:
+            selected[call.message.chat.id]['delivery'] = 1
+            markup = types.InlineKeyboardMarkup(row_width=5)     
+        
+            markup.add(types.InlineKeyboardButton(text='ASAP (60 mins)',callback_data="['value', '" + 'shour' + "', '" + "shour" + "']"),
+                       types.InlineKeyboardButton(text='In 1.5 hour',callback_data="['value', '" + '1hour' + "', '" + "1hour" + "']"),
+                       types.InlineKeyboardButton(text='In 2 hour',callback_data="['value', '" + '2hour' + "', '" + "2hour" + "']"),
+                       types.InlineKeyboardButton(text='In 3 hour',callback_data="['value', '" + '3hour' + "', '" + "3hour" + "']"),
+                     types.InlineKeyboardButton(text="In 5 hour",callback_data="['value', '" + "5hour" + "', '" + "5hour" + "']"))
+            bot.send_message(chat_id=call.message.chat.id,text="How Soon your order like to be delivered",reply_markup=markup,parse_mode='HTML')
+            
+        elif '5hour' in keyFromCallBack:
+            selected[call.message.chat.id]['deliverytime'] = 5
+            prices = [
+        types.LabeledPrice(label='Pizza Bot', amount=(int)(selected[message.chat.id]['price'])*100),
+       
+    ]
+            m= bot.send_invoice(chat_id=call.message.chat.id, title='Pizza',
+                               description=selected[call.message.chat.id]['final'],
+                               provider_token=PAYMENTS_PROVIDER_TOKEN,
+                               currency='usd',
+                               photo_url='https://media-cdn.tripadvisor.com/media/photo-s/0a/c0/7c/98/best-pizza-in-lahore.jpg',
+                               photo_height=None,  # !=0/None or picture won't be shown
+                               photo_width=512,
+                               photo_size=512,
+                               is_flexible=False,  # True If you need to set up Shipping Fee
+                               prices=prices,
+                                 start_parameter='pizza',
+                               invoice_payload='HAPPY'
+                               )
+            print(m)
+            m = str(m).split("'pay': ",1)[1].split('}',1)[0]
+            if m == 'True':
+                print("Payment Successfull")
+            else:
+                print('ERror in payment')
+        elif '3hour' in keyFromCallBack:
+            selected[call.message.chat.id]['deliverytime'] = 3
+            prices = [
+        types.LabeledPrice(label='Pizza Bot', amount=(int)(selected[message.chat.id]['price'])*100),
+       
+    ]
+            m= bot.send_invoice(chat_id=call.message.chat.id, title='Pizza',
+                               description=selected[call.message.chat.id]['final'],
+                               provider_token=PAYMENTS_PROVIDER_TOKEN,
+                               currency='usd',
+                               photo_url='https://media-cdn.tripadvisor.com/media/photo-s/0a/c0/7c/98/best-pizza-in-lahore.jpg',
+                               photo_height=None,  # !=0/None or picture won't be shown
+                               photo_width=512,
+                               photo_size=512,
+                               is_flexible=False,  # True If you need to set up Shipping Fee
+                               prices=prices,
+                                 start_parameter='pizza',
+                               invoice_payload='HAPPY'
+                               )
+            print(m)
+            m = str(m).split("'pay': ",1)[1].split('}',1)[0]
+            if m == 'True':
+                print("Payment Successfull")
+            else:
+                print('ERror in payment')
+                
+        elif '5hour' in keyFromCallBack:
+            selected[call.message.chat.id]['deliverytime'] = 5
+            prices = [
+        types.LabeledPrice(label='Pizza Bot', amount=(int)(selected[message.chat.id]['price'])*100),
+       
+    ]
+            m= bot.send_invoice(chat_id=call.message.chat.id, title='Pizza',
+                               description=selected[call.message.chat.id]['final'],
+                               provider_token=PAYMENTS_PROVIDER_TOKEN,
+                               currency='usd',
+                               photo_url='https://media-cdn.tripadvisor.com/media/photo-s/0a/c0/7c/98/best-pizza-in-lahore.jpg',
+                               photo_height=None,  # !=0/None or picture won't be shown
+                               photo_width=512,
+                               photo_size=512,
+                               is_flexible=False,  # True If you need to set up Shipping Fee
+                               prices=prices,
+                                 start_parameter='pizza',
+                               invoice_payload='HAPPY'
+                               )
+            print(m)
+            m = str(m).split("'pay': ",1)[1].split('}',1)[0]
+            if m == 'True':
+                print("Payment Successfull")
+            else:
+                print('ERror in payment')
+        elif 'shour' in keyFromCallBack:
+            selected[call.message.chat.id]['deliverytime'] = 1
+            prices = [
+            types.LabeledPrice(label='Pizza Bot', amount=(int)(selected[message.chat.id]['price'])*100),
+       
+    ]
+            m= bot.send_invoice(chat_id=call.message.chat.id, title='Pizza',
+                               description=selected[call.message.chat.id]['final'],
+                               provider_token=PAYMENTS_PROVIDER_TOKEN,
+                               currency='usd',
+                               photo_url='https://media-cdn.tripadvisor.com/media/photo-s/0a/c0/7c/98/best-pizza-in-lahore.jpg',
+                               photo_height=None,  # !=0/None or picture won't be shown
+                               photo_width=512,
+                               photo_size=512,
+                               is_flexible=False,  # True If you need to set up Shipping Fee
+                               prices=prices,
+                                 start_parameter='pizza',
+                               invoice_payload='HAPPY'
+                               )
+            print(m)
+            m = str(m).split("'pay': ",1)[1].split('}',1)[0]
+            if m == 'True':
+                print("Payment Successfull")
+            else:
+                print('ERror in payment')
+        elif '1hour' in keyFromCallBack:
+            selected[call.message.chat.id]['deliverytime'] = 1.5
+            prices = [
+        types.LabeledPrice(label='Pizza Bot', amount=(int)(selected[message.chat.id]['price'])*100),
+       
+    ]
+            m= bot.send_invoice(chat_id=call.message.chat.id, title='Pizza',
+                               description=selected[call.message.chat.id]['final'],
+                               provider_token=PAYMENTS_PROVIDER_TOKEN,
+                               currency='usd',
+                               photo_url='https://media-cdn.tripadvisor.com/media/photo-s/0a/c0/7c/98/best-pizza-in-lahore.jpg',
+                               photo_height=None,  # !=0/None or picture won't be shown
+                               photo_width=512,
+                               photo_size=512,
+                               is_flexible=False,  # True If you need to set up Shipping Fee
+                               prices=prices,
+                                 start_parameter='pizza',
+                               invoice_payload='HAPPY'
+                               )
+            print(m)
+            m = str(m).split("'pay': ",1)[1].split('}',1)[0]
+            if m == 'True':
+                print("Payment Successfull")
+            else:
+                print('ERror in payment')
+                
+
+        elif 'OrderNo' in keyFromCallBack:
+            selected[call.message.chat.id]['delivery'] = 0
+            prices = [
+            types.LabeledPrice(label='Pizza Bot', amount=(int)(selected[message.chat.id]['price'])*100),
+           
+        ]
+            m= bot.send_invoice(chat_id=call.message.chat.id, title='Pizza',
+                                   description=selected[call.message.chat.id]['final'],
+                                   provider_token=PAYMENTS_PROVIDER_TOKEN,
+                                   currency='usd',
+                                   photo_url='https://media-cdn.tripadvisor.com/media/photo-s/0a/c0/7c/98/best-pizza-in-lahore.jpg',
+                                   photo_height=None,  # !=0/None or picture won't be shown
+                                   photo_width=512,
+                                   photo_size=512,
+                                   is_flexible=False,  # True If you need to set up Shipping Fee
+                                   prices=prices,
+                                     start_parameter='pizza',
+                                   invoice_payload='HAPPY'
+                                   )
+            print(m)
+            m = str(m).split("'pay': ",1)[1].split('}',1)[0]
+            if m == 'True':
+                print("Payment Successfull")
+            else:
+                print('ERror in payment')
+                
+
+            
         elif 'again' in keyFromCallBack:
             bot.send_message(call.message.chat.id,'Enter Your 16 Digit Card Number')
             selected[call.message.chat.id]['check'] = 5
@@ -236,7 +390,7 @@ def handle_query(call):
         elif 'Start' in keyFromCallBack:
             stringList = {"Order": "Order", "Hours": "Opening hours", "Menu": "Menu"}
             bot.send_message(chat_id=call.message.chat.id,text="Hello ! Welcome ! I am your personal virtual assistance",reply_markup=makeKeyboard(stringList,1),parse_mode='HTML')
-            temp = {'check':0,'name':'','phone':'','final':'','price':0,'egg':0,'fish':0,'meat':0,'veg':0,'stringList1':{},'cardno':'','email':'','Month':'','Year':'','cvv':''}
+            temp = {'check':0,'name':'','phone':'','final':'','delivery':0,'deliverytime':0,'price':0,'egg':0,'fish':0,'meat':0,'veg':0,'stringList1':{},'cardno':'','email':'','Month':'','Year':'','cvv':''}
             del selected[call.message.chat.id]
             selected[call.message.chat.id]=temp
         elif 'Veg' in keyFromCallBack:
@@ -692,22 +846,21 @@ def handle_query(call):
                               reply_markup=makeKeyboard(selected[call.message.chat.id]['stringList1'],2),
                               parse_mode='HTML')
         if len(selected[call.message.chat.id]['stringList1']) == 0:
-            temp = {call.message.chat.id:{'check':0,'name':'','phone':'','final':'','price':0,'egg':0,'fish':0,'meat':0,'veg':0,'stringList1':{},'cardno':'','email':'','Month':'','Year':'','cvv':''}}
+            temp = {call.message.chat.id:{'check':0,'name':'','phone':'','final':'','delivery':0,'deliverytime':0,'price':0,'egg':0,'fish':0,'meat':0,'veg':0,'stringList1':{},'cardno':'','email':'','Month':'','Year':'','cvv':''}}
 
-     
-        
-def botpizza_21():
-    
-    
-    if True:
-        try:            
-            retrun bot.polling(none_stop=True, interval=0)
-            #executor.start_polling(dp, skip_updates=True)
-        except Exception as e:
-            retrun e
-            
-        
-#botpizza_21()
+          
 
+@server.route('/' + '1858996616:AAH_YJcU9EiimHjJ5sBxjrX0fxG4CEIWLRo', methods=['POST'])
+def getMessage():
+   bot.process_new_updates([telebot.types.Update.de_json(request.stream.read().decode("utf-8"))])
+   return "!", 200
+@server.route("/")
+def webhook():
+   bot.remove_webhook()
+   bot.set_webhook(url='https://shumaila.herokuapp.com/' + '1858996616:AAH_YJcU9EiimHjJ5sBxjrX0fxG4CEIWLRo')
+   return "!", 200
+if __name__ == "__main__":
+   server.run(host="0.0.0.0", port=int(os.environ.get('PORT', 5000)))
 
+   
 
