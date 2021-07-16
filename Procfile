@@ -1,1 +1,1 @@
-web: python botpizza_api.py
+web: python botpizz.py
